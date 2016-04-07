@@ -1,16 +1,22 @@
 import sys
-from getprice import get_price
+from getprice import getprice
 import numpy as np
+import time
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print 'Get all data available from Yahoo!'
-        print 'getdata <SYMB>'
+    if len(sys.argv) < 3:
+        print 'find the correlation between two symbols'
+        print 'corrcoef <SYMB1> <SYMB2> <days>'
         exit()
 
-    data1 = get_price(sys.argv[1], '00', '2', '1970', '03', '7', '2016')
-    data2 = get_price(sys.argv[2], '00', '2', '1970', '03', '7', '2016')
-    x = data1['close'][0:100]
-    y = data2['close'][0:100]
+    today = time.strftime("%d/%m/%Y")
+    data1 = getprice(sys.argv[1], '02/1/1970', today)
+    data2 = getprice(sys.argv[2], '02/1/1970', today)
+    if len(sys.argv) == 4:
+        days = int(sys.argv[3])
+    else:
+        days = 100
+    x = data1['close'][0:days]
+    y = data2['close'][0:days]
 
     print np.corrcoef(x,y)[0][1]

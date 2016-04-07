@@ -7,7 +7,7 @@ from io import BytesIO
 # d : end month
 # e : end day
 # f : end year
-def get_price(symbol, a, b, c, d, e, f):
+def getprice_internal(symbol, a, b, c, d, e, f):
     url = 'http://real-chart.finance.yahoo.com/table.csv?s=' + symbol + \
         '&a=' + a + '&b=' + b + '&c=' + c + '&d=' + d + '&e=' + e + '&f=' + f + \
         '&g=d&ignore=.csv'
@@ -33,3 +33,13 @@ def get_price(symbol, a, b, c, d, e, f):
         data['volume'].append(float(x[5]))
         
     return data
+
+# start and end must be in format of DD/MM/YYYY
+def getprice(symb, start, end):
+    b,a,c = start.split('/')
+    e,d,f = end.split('/') 
+    
+    # yahoo month starts with 0
+    a = str(int(b) - 1)
+    d = str(int(e) - 1)
+    return getprice_internal(symb, a, b, c, d, e, f)
