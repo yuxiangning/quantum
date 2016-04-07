@@ -1,4 +1,3 @@
-import sys
 import pycurl
 from io import BytesIO
 
@@ -27,19 +26,10 @@ def get_price(symbol, a, b, c, d, e, f):
     for i in rawdata:
         x = i.split(',')
         data['date'].append(x[0])
-        data['open'].append(x[1])
-        data['high'].append(x[2])
-        data['low'].append(x[3])
-        data['close'].append(x[4])
-        data['volume'].append(x[5])
+        data['open'].append(float(x[1]))
+        data['high'].append(float(x[2]))
+        data['low'].append(float(x[3]))
+        data['close'].append(float(x[4]))
+        data['volume'].append(float(x[5]))
         
     return data
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print 'Get all data available from Yahoo!'
-        print 'getdata <SYMB>'
-        exit()
-
-    data = get_price(sys.argv[1], '00', '2', '1970', '03', '7', '2016')
-    print data['open'][0:100]
