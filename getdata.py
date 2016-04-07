@@ -14,16 +14,26 @@ def get_price(symbol, a, b, c, d, e, f):
         '&g=d&ignore=.csv'
 
     buffer = BytesIO()
-    c = pycurl.Curl()
-    c.setopt(c.URL, url)
-    c.setopt(c.WRITEFUNCTION, buffer.write)
-    c.perform()
-    c.close()
+    curl = pycurl.Curl()
+    curl.setopt(curl.URL, url)
+    curl.setopt(curl.WRITEFUNCTION, buffer.write)
+    curl.perform()
+    curl.close()
 
     body = buffer.getvalue()
 
-    return body.decode('iso-8859-1').split()[2:]
-    
+    rawdata = body.decode('iso-8859-1').split()[2:]
+    data = {'date': [], 'open': [], 'high': [], 'low': [], 'close': [], 'volume': []}
+    for i in rawdata:
+        x = i.split(',')
+        data['date'].append(x[0])
+        data['open'].append(x[1])
+        data['high'].append(x[2])
+        data['low'].append(x[3])
+        data['close'].append(x[4])
+        data['volume'].append(x[5])
+        
+    return data
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -31,5 +41,5 @@ if __name__ == '__main__':
         print 'getdata <SYMB>'
         exit()
 
-    x = get_price(sys.argv[1], '00', '2', '1970', '03', '7', '2016')
-    print x[0]
+    data = get_price(sys.argv[1], '00', '2', '1970', '03', '7', '2016')
+    print data['open'][0:100]
